@@ -36,7 +36,8 @@ def getLogisticRegression(dm1):
     df_X = df.drop(['ID', 'KK1'], axis=1)
 
     # 1그룹의 경우 문항이 9개밖에 없으므로 Q3_10 컬럼 제거해주어야 함
-    df_X = df_X.drop(['Q3_10'], axis=1)
+    if dm1 == 1:
+        df_X = df_X.drop(['Q3_10'], axis=1)
 
     # 모델 학습
     lr = LogisticRegression(max_iter=4000)
@@ -62,10 +63,8 @@ def submit(request):
     gubun = request.POST['gubun']
 
     # 알고리즘 테스트
-    fieldCount = 10
     if gubun == '1':
         lr = lr_1
-        fieldCount = 9
     elif gubun == '2':
         lr = lr_2
     elif gubun == '3':
@@ -74,7 +73,7 @@ def submit(request):
         lr = lr_4  
 
     X = []
-    for i in range(1, fieldCount + 1):
+    for i in range(1, 11):
         value = request.POST['question' + str(i)]
         X.append(value)
         
