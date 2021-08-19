@@ -86,9 +86,15 @@ def submit(request):
 
     gubun = request.POST['gubun']
 
-    # 구분값에 따른 검증기 선택
+    # 문항 갯수는 10개로 설정
+    questionCount = 10
+
+    # 연령 구분값에 따른 검증기 선택
     if gubun == '1':
         lr = lr_1
+
+        # 영유아인 경우 문할수를 9개로 설정
+        questionCount = 9
     elif gubun == '2':
         lr = lr_2
     elif gubun == '3':
@@ -98,32 +104,22 @@ def submit(request):
 
     # 검증 데이터 생성
     X = []
-    for i in range(1, 11):
-        value = request.POST['question' + str(i)]
-        if value == None or value == '':
-            continue
-
+    for i in range(questionCount):
+        value = request.POST['question' + str(i + 1)]
         X.append(int(value))
         
     # 검증
     result = lr.predict([X])
 
-    # 검증 요청 및 결과를 DB 에 저장
+    # 검증 요청/결과를 DB 에 저장하기 위해 모뎅에 데이터 설정
     res = Response()
     res.gubun = gubun
-    res.question1 = request.POST['question1']
-    res.question2 = request.POST['question2']
-    res.question3 = request.POST['question3']
-    res.question4 = request.POST['question4']
-    res.question5 = request.POST['question5']
-    res.question6 = request.POST['question6']
-    res.question7 = request.POST['question7']
-    res.question8 = request.POST['question8']
-    res.question9 = request.POST['question9']
-    res.question10 = request.POST['question10']
     res.name = request.POST['name']
     res.reg_date = datetime.datetime.now()
     res.kk1 = result
+    res.setQuestionData(X)
+
+    # 저장
     res.save()
 
 
