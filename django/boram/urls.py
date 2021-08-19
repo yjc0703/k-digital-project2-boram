@@ -18,5 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    ######################################################
+    # boram_home application 의 url 을 사용할 수 있도록 설정
+    ######################################################
     path('', include('boram_home.urls'))
 ]

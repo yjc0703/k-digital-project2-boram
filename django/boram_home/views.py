@@ -7,8 +7,17 @@ import pandas as pd
 from .models import *
 import datetime
 
+###############################################################
+# 서버 기동 시점에 각 연령대별 검증기 생성하여 전역 변수에 할당 시작
+###############################################################
+
+
+# DB 설정 파일 읽어오기
 DB = DATABASES['default']
 
+###################################################################
+# DB 에 접속해서 학습 데이터 조회하여 검증기 학습 시키고 리턴해주는 함수
+###################################################################
 def getLogisticRegression(dm1):
 
     # DB 에서 데이터 읽어오기
@@ -46,23 +55,38 @@ def getLogisticRegression(dm1):
     # 모델 리턴
     return lr
 
+
+#######################################################
 # 구분값(dm1) 기준으로 4개의 모델을 서버 기동과 동시에 생성
+#######################################################
 lr_1 = getLogisticRegression(1)
 lr_2 = getLogisticRegression(2)
 lr_3 = getLogisticRegression(3)
 lr_4 = getLogisticRegression(4)
 
 
+#############################################################
+# 서버 기동 시점에 각 연령대별 검증기 생성하여 전역 변수에 할당 끝
+#############################################################
+
+
 # Create your views here.
+
+####################
+# 메인화면 템플릿 제공
+####################
 def index(request):
     return render(request, 'index.html')  
 
 
+# ########################################################
+# 제출된 설문결과를 학습된 검증기에 검증하고 과의존 여부를 리턴
+# ########################################################
 def submit(request):
 
     gubun = request.POST['gubun']
 
-    # 알고리즘 테스트
+    # 구분값에 따른 검증기 선택
     if gubun == '1':
         lr = lr_1
     elif gubun == '2':
@@ -72,15 +96,16 @@ def submit(request):
     elif gubun == '4':
         lr = lr_4  
 
+    # 검증 데이터 생성
     X = []
     for i in range(1, 11):
         value = request.POST['question' + str(i)]
         X.append(value)
         
+    # 검증
     result = lr.predict([X])
 
-
-    # DB 에 저장
+    # 검증 요청 및 결과를 DB 에 저장
     res = Response()
     res.gubun = gubun
     res.question1 = request.POST['question1']
@@ -96,7 +121,6 @@ def submit(request):
     res.name = request.POST['name']
     res.reg_date = datetime.datetime.now()
     res.kk1 = result
-
     res.save()
 
 

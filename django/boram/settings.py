@@ -75,6 +75,9 @@ WSGI_APPLICATION = 'boram.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+######################################
+# db.py 의 데이터베이스 설정을 불러온다.
+######################################
 DATABASES = db.DATABASES
 
 
@@ -116,6 +119,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+############################################
+# 정적파일(images, css, javascript) 경로 설정
+############################################
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 ) 
