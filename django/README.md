@@ -6,7 +6,10 @@
 2. db.py 파일에 DB 접속정보를 설정합니다.
 
 ### DB 데이터 생성
-1. python manage.py migration
+- python manage.py migration
 
 ### 서버 실행
-1. python manage.py runserver
+- python manage.py runserver
+
+### 배포 설정
+- 점프 투 파이썬(https://wikidocs.net/76904)
