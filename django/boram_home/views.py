@@ -100,7 +100,10 @@ def submit(request):
     X = []
     for i in range(1, 11):
         value = request.POST['question' + str(i)]
-        X.append(value)
+        if value == None or value == '':
+            continue
+
+        X.append(int(value))
         
     # 검증
     result = lr.predict([X])
