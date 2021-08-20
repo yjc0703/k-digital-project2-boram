@@ -22,6 +22,7 @@
             .form-check {margin-left: 20px}
             div.mb-3 {margin-bottom: 60px !important;}
             #result {display:block; margin: 20px 0; font-size: 1.2em; font-weight: bold;}
+            #result-name {font-size: 1.1em}
         </style>
     </head>
     <body id="page-top">
@@ -448,7 +449,7 @@
         <section class="content-section bg-primary text-white">
             <div class="container px-4 px-lg-5 text-center">
                 <h2 id="result-container" style="display: none;">
-                    당신은
+                    <span id="result-name"></span> 님은
                     <strong id="result"></strong>
                     입니다.
                 </h2>
@@ -488,11 +489,17 @@
             // 제출 버튼
             var submitButton = $('#submitButton')
 
-
             /**
              * 최종 제출 시 전송 function
             */
             function submit() {
+
+                var name = $('#name').val();
+                if(!name) {
+                    alert('이름은 반드시 실명으로 입력해주세요.');
+                    location.hash = 'name'
+                    return false;
+                }
 
                 // 중복 제출 방지를 위해 한번 처리되면 버튼 비활성화
                 submitButton.attr('disabled', 'disabled');
@@ -508,9 +515,11 @@
                     'success': function (response) {   // 처리 후 데이터 수신
 
                         // 결과가 노출되는 영역
-                        var resultContainer = $('#result-container')
+                        var resultContainer = $('#result-container');
                         // 과의존 / 위험군 / 정상 표시 영역
                         var resultArea = $('#result');
+
+                        var resultName = $('#result-name');
 
                         // 결과를 받아서 화면에 노출
                         if(response == '1') {
@@ -524,7 +533,10 @@
                             resultArea.css({'color': '#76ea34'})
                         }
 
+                        resultName.html(name);
                         resultContainer.show();
+                        location.hash = 'result-container';
+                        
 
                     }
                 });

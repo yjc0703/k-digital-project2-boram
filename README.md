@@ -2,7 +2,7 @@
 > 혹시 나도 스몸비?
 
 ### 분석 데이터
-    - https://www.data.go.kr/data/15038425/fileData.do
+https://www.data.go.kr/data/15038425/fileData.do
 
 
 ### 프로젝트 수행 방향
